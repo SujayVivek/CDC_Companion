@@ -494,94 +494,110 @@ def run():
                 st.error("Wrong ID & Password Provided")
     else:
         #Reviewer Side of the page:
-        st.success('Welcome to the Reviewers Side')
-        viewLogin = True;
-        # insert_data_reviewers('Sujay Vivek', 'Sujay Vivek','Sujay96Vivek', 96, 0)
-        if(viewLogin):
-            ad_user = st.text_input("Username")
-            ad_password = st.text_input("Password", type='password')
-            ad_user = str(ad_user)
-            ad_password = str(ad_password)
+        def reviewer_login():
+            if 'logged_in' not in st.session_state:
+                st.session_state['logged_in'] = False
 
-        if st.button('Login'):
-            cursor.execute("SELECT Password FROM reviewer_data WHERE UserName = %s", (ad_user,))
-            row = cursor.fetchone()
-            if row and (ad_password == row[0]):
-              st.success(f"Welcome {ad_user}!")
-              viewLogin = False;
-            
-              #now show the number of cvs left:
-              cursor.execute("SELECT ReviewsNumber, Cvsreviewed FROM reviewer_data WHERE UserName = %s", (ad_user,))
-              cvnums = cursor.fetchone()
+            if not st.session_state['logged_in']:
+                st.success('Welcome to the Reviewers Side')
+                ad_user = st.text_input("Username")
+                ad_password = st.text_input("Password", type='password')
 
-              if cvnums:
+                if st.button('Login'):
+                    cursor.execute("SELECT Password FROM reviewer_data WHERE UserName = %s", (ad_user,))
+                    row = cursor.fetchone()
+                    if row and (ad_password == row[0]):
+                        st.session_state['logged_in'] = True
+                        st.session_state['ad_user'] = ad_user
+                        st.success(f"Welcome {ad_user}!")
+                    else:
+                        st.error("Invalid username or password")
+            else:
+                display_review_section(st.session_state['ad_user'])
+
+        # Function to display the review section
+        def display_review_section(ad_user):
+            if st.button('Logout'):
+                st.session_state['logged_in'] = False
+                st.experimental_rerun()
+
+
+            cursor.execute("SELECT ReviewsNumber, Cvsreviewed FROM reviewer_data WHERE UserName = %s", (ad_user,))
+            cvnums = cursor.fetchone()
+
+            if cvnums:
                 ReviewsNumber = cvnums[0]
                 Cvsreviewed = cvnums[1]
                 st.markdown(
-                """
-                <h2>Number of CVs Left to be Reviewed: <span style='color:blue;'>{}</span></h2>
-                <h3>Number of CVs Reviewed: <span style='color:green;'>{}</span></h3>
-                """.format(ReviewsNumber - Cvsreviewed, Cvsreviewed), 
-                unsafe_allow_html=True
+                    f"""
+                    <h2>Number of CVs Left to be Reviewed: <span style='color:blue;'>{ReviewsNumber - Cvsreviewed}</span></h2>
+                    <h3>Number of CVs Reviewed: <span style='color:green;'>{Cvsreviewed}</span></h3>
+                    """,
+                    unsafe_allow_html=True
                 )
-              else:
+            else:
                 st.error("User not found or no data available.")
-              
-              #Start showing the cvs here...maybe lets sho first 5?
-              query = """
-              SELECT DISTINCT Email_ID, Name, drive_link 
-              FROM user_data 
-              WHERE status_num = 1 
-              LIMIT 5;
-              """
-              cursor.execute(query)
-              cvsList = cursor.fetchall()
 
-              cv_count_query = "SELECT COUNT(*) FROM user_data WHERE status_num = 1;"
-              cursor.execute(cv_count_query)
-              cv_count = cursor.fetchone()[0]
-              cv_display_count = min(5, cv_count)
+            query = """
+            SELECT DISTINCT Email_ID, Name, drive_link 
+            FROM user_data 
+            WHERE status_num = 1 
+            LIMIT 5;
+            """
+            cursor.execute(query)
+            cvsList = cursor.fetchall()
 
-              st.write(f"Displaying {cv_display_count}/{ReviewsNumber - Cvsreviewed} CVs left to be reviewed")
-              
+            cv_count_query = "SELECT COUNT(*) FROM user_data WHERE status_num = 1;"
+            cursor.execute(cv_count_query)
+            cv_count = cursor.fetchone()[0]
+            cv_display_count = min(5, cv_count)
 
-              for email_id, name, drive_link in cvsList[:cv_display_count]:
-    # Display the CV image as a rectangle (assuming you have a function to generate image from drive link)
+            st.write(f"Displaying {cv_display_count}/{ReviewsNumber - Cvsreviewed} CVs left to be reviewed")
+
+            for email_id, name, drive_link in cvsList[:cv_display_count]:
                 st.image('./Logo/logo2.png', width=150)
                 st.write(f"Name: {name}")
                 st.write(f"Email: {email_id}")
                 st.markdown(f"[Drive Link]({drive_link})")
 
-                # st.image(img, caption=name, use_column_width=True)
-                # st.write(f"Email: {email_id}")
-                # st.write(f"[View CV]({drive_link})")
+                
+                st.markdown(js_alert, unsafe_allow_html=True)
+                # Use a form to handle the review submission
+                with st.form(key=f"form_{name}"):
+                    review = st.text_area(f"Review for {name}", height=100, key=f"review_{name}")
+                    submit_button = st.form_submit_button(label=f"Submit Review for {name}")
 
-                review = st.text_area(f"Review for {name}", height=100)
-                if st.button(f"Submit Review for {name}"):
-                    # Update the database with the review (you need to implement this part)
-                    word_count = len(review.split())
-                    if word_count < 50:
-                        st.error("The review must be at least 50 words long.")
-                    else:
-                        update_review_query = "UPDATE user_data SET review = %s, status_num = 2 WHERE Email_ID = %s AND Name = %s;"
-                        cursor.execute(update_review_query, (review, email_id, name))
-                        connection.commit()
+                    if submit_button:
+                            word_count = len(review.split())
+                        # if word_count < 50:
+                        #     st.error("The review must be at least 50 words long.")
+                        # else:
+                            update_review_query = "UPDATE user_data SET status_num = 2 WHERE Email_ID = %s AND Name = %s;"
+                            cursor.execute(update_review_query, (email_id, name))
+                            connection.commit()
 
-                        # Insert the review into the done_reviews table
-                        insert_review_query = """
-                        INSERT INTO reviews_data (Name, Email_ID, Reviewer_Name, Drive_Link, Review)
-                        VALUES (%s, %s, %s, %s, %s)
-                        """
-                        cursor.execute(insert_review_query, (name, email_id, ad_user, drive_link, review))
-                        connection.commit()
+                            # Insert the review into the done_reviews table
+                            insert_review_query = """
+                            INSERT INTO reviews_data (Name, Email_ID, Reviewer_Name, Drive_Link, Review)
+                            VALUES (%s, %s, %s, %s, %s)
+                            """
+                            cursor.execute(insert_review_query, (name, email_id, ad_user, drive_link, review))
+                            connection.commit()
 
-                        st.success(f"Review for {name} submitted successfully!")
+                            update_reviewer_query = """
+                            UPDATE reviewer_data 
+                            SET Cvsreviewed = Cvsreviewed + 1 
+                            WHERE UserName = %s
+                            """
+                            cursor.execute(update_reviewer_query, (ad_user,))
+                            connection.commit()
 
+                            st.success(f"Review for {name} submitted successfully!")
 
-
-            else:
-              st.error("Invalid username or password")
-
+                            # Remove the reviewed CV from the list
+                            cvsList = [cv for cv in cvsList if cv[0] != email_id]
+                            st.experimental_rerun()
+        reviewer_login()
 
 
 run()
