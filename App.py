@@ -43,6 +43,7 @@ import plotly.express as px #to create visualisations at the admin session
 import nltk
 nltk.download('stopwords')
 import os
+import time
 
 os.environ["PAFY_BACKEND"] = "internal"
 
@@ -568,6 +569,7 @@ def run():
                     submit_button = st.form_submit_button(label=f"Submit Review for {name}")
 
                     if submit_button:
+                        
                             word_count = len(review.split())
                         # if word_count < 50:
                         #     st.error("The review must be at least 50 words long.")
@@ -593,10 +595,13 @@ def run():
                             connection.commit()
 
                             st.success(f"Review for {name} submitted successfully!")
-
+                            #make a deloay of 5seconds here.
                             # Remove the reviewed CV from the list
+                            time.sleep(5)
                             cvsList = [cv for cv in cvsList if cv[0] != email_id]
                             st.experimental_rerun()
+
+                        
         reviewer_login()
 
 
