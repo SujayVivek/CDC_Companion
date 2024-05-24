@@ -561,7 +561,7 @@ def run():
                 st.markdown(f"[Drive Link]({drive_link})")
 
                 
-                st.markdown(js_alert, unsafe_allow_html=True)
+                # st.markdown(js_alert, unsafe_allow_html=True)
                 # Use a form to handle the review submission
                 with st.form(key=f"form_{name}"):
                     review = st.text_area(f"Review for {name}", height=100, key=f"review_{name}")
