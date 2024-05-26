@@ -113,12 +113,12 @@ def course_recommender(course_list):
 connection = pymysql.connect(host='localhost',user='root',password='sujay@admin$password123',db='cdc_companion')
 cursor = connection.cursor()
 
-def insert_data(name,email,res_score,timestamp,no_of_pages,reco_field,cand_level,skills,recommended_skills,courses, drive_link, status):
+def insert_data(name,email,res_score,timestamp,no_of_pages,reco_field,cand_level,skills,recommended_skills,courses, drive_link, status, profile):
     DB_table_name = 'user_data'
     status = 0
     insert_sql = "insert into " + DB_table_name + """
-    values (0,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
-    rec_values = (str(name), email, str(res_score), timestamp,str(no_of_pages), reco_field, cand_level, skills,recommended_skills,courses, str(drive_link) , int(status))
+    values (0,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
+    rec_values = (str(name), email, str(res_score), timestamp,str(no_of_pages), reco_field, cand_level, skills,recommended_skills,courses, str(drive_link) , int(status), str(profile))
     cursor.execute(insert_sql, rec_values)
     connection.commit()
 
@@ -391,7 +391,7 @@ def run():
 
                     insert_data(str(name), resume_data['email'], str(resume_score), timestamp,
                                 str(resume_data['no_of_pages']), reco_field, cand_level, str(resume_data['skills']),
-                                str(recommended_skills), str(rec_course), "NULL", status)
+                                str(recommended_skills), str(rec_course), "NULL", status, "NULL")
 
 
                     # ## Resume writing video
@@ -422,22 +422,22 @@ def run():
                     fetch_status_query = "SELECT status_num FROM user_data WHERE Name = %s"
                     cursor.execute(fetch_status_query, (name,))
                     status_row = cursor.fetchone()
-
+                    profileList = ['Data', 'Software', 'Consult', 'Finance-Quant', 'Product', 'FMCG']
                     # Check if the status is NULL or not set
                     if status_row is None or status_row[0] == 0:
                         st.write("Do you want to submit your CV to a senior for review?")
                         email_input = st.text_input("Enter your Email here: ")
                         drive_link = st.text_input("Enter your Drive Link: ")
-
+                        profile = st.selectbox("Enter the profile you are targetting", profileList)
                         if st.button("Submit"):
                             if email_input and drive_link:  # Check if email and drive link are provided
                                 # Update the email, drive_link, and status in the database
                                 update_query = """
                                 UPDATE user_data
-                                SET Email_ID = %s, drive_link = %s, status_num = 1
+                                SET Email_ID = %s, drive_link = %s, status_num = 1, profilez = %s
                                 WHERE Name = %s
                                 """
-                                cursor.execute(update_query, (email_input, drive_link, name))
+                                cursor.execute(update_query, (email_input, drive_link, profile, name))
                                 connection.commit()
                                 st.success("Information updated successfully!")
                             else:
@@ -459,37 +459,52 @@ def run():
         ad_user = st.text_input("Username")
         ad_password = st.text_input("Password", type='password')
         if st.button('Login'):
-            if ad_user == 'briit' and ad_password == 'briit123':
-                st.success("Welcome Dr Briit !")
+            if ad_user == 'sujay' and ad_password == 'sujay123':
+                st.success("Welcome Bruh !")
                 # Display Data
-                cursor.execute('''SELECT*FROM user_data''')
+                cursor.execute('''SELECT * FROM user_data''')
                 data = cursor.fetchall()
                 st.header("**User's Data**")
                 df = pd.DataFrame(data, columns=['ID', 'Name', 'Email', 'Resume Score', 'Timestamp', 'Total Page',
                                                  'Predicted Field', 'User Level', 'Actual Skills', 'Recommended Skills',
-                                                 'Recommended Course'])
+                                                 'Recommended Course', 'drive_link','status_num','profilez'])
                 st.dataframe(df)
                 st.markdown(get_table_download_link(df,'User_Data.csv','Download Report'), unsafe_allow_html=True)
                 ## Admin Side Data
                 query = 'select * from user_data;'
                 plot_data = pd.read_sql(query, connection)
 
-                ## Pie chart for predicted field recommendations
-                labels = plot_data.Predicted_Field.unique()
-                print(labels)
-                values = plot_data.Predicted_Field.value_counts()
-                print(values)
-                st.subheader("**Pie-Chart for Predicted Field Recommendation**")
-                fig = px.pie(df, values=values, names=labels, title='Predicted Field according to the Skills')
-                st.plotly_chart(fig)
+                # ## Pie chart for predicted field recommendations
+                # labels = plot_data.Predicted_Field.unique()
+                # print(labels)
+                # values = plot_data.Predicted_Field.value_counts()
+                # print(values)
+                # st.subheader("**Pie-Chart for Predicted Field Recommendation**")
+                # fig = px.pie(df, values=values, names=labels, title='Predicted Field according to the Skills')
+                # st.plotly_chart(fig)
 
-                ### Pie chart for User's👨‍💻 Experienced Level
-                labels = plot_data.User_level.unique()
-                values = plot_data.User_level.value_counts()
-                st.subheader("**Pie-Chart for User's Experienced Level**")
-                fig = px.pie(df, values=values, names=labels, title="Pie-Chart📈 for User's👨‍💻 Experienced Level")
-                st.plotly_chart(fig)
+                # ### Pie chart for User's👨‍💻 Experienced Level
+                # labels = plot_data.User_level.unique()
+                # values = plot_data.User_level.value_counts()
+                # st.subheader("**Pie-Chart for User's Experienced Level**")
+                # fig = px.pie(df, values=values, names=labels, title="Pie-Chart📈 for User's👨‍💻 Experienced Level")
+                # st.plotly_chart(fig)
 
+                cursor.execute('''SELECT * FROM reviewer_data''')
+                data = cursor.fetchall()
+                st.header("**Reviewer's Data**")
+                df = pd.DataFrame(data, columns=['ID', 'Name', 'Email', 'UserName', 'Password', 'ReviewsNumber', 'Cvsreviewed', 'Rprofilez'])
+                st.dataframe(df)
+                st.markdown(get_table_download_link(df,'User_Data.csv','Download Report'), unsafe_allow_html=True)
+                ## Admin Side Data
+                # query = 'select * from _data;'
+
+                cursor.execute('''SELECT * FROM reviews_data''')
+                data = cursor.fetchall()
+                st.header("**Reviewer's Data**")
+                df = pd.DataFrame(data, columns=['id', 'Name', 'Email_ID', 'Reviewer_Name', 'Drive_link', 'Review'])
+                st.dataframe(df)
+                st.markdown(get_table_download_link(df,'User_Data.csv','Download Report'), unsafe_allow_html=True)
 
             else:
                 st.error("Wrong ID & Password Provided")
@@ -523,12 +538,13 @@ def run():
                 st.experimental_rerun()
 
 
-            cursor.execute("SELECT ReviewsNumber, Cvsreviewed FROM reviewer_data WHERE UserName = %s", (ad_user,))
+            cursor.execute("SELECT ReviewsNumber, Cvsreviewed, Rprofilez FROM reviewer_data WHERE UserName = %s", (ad_user,))
             cvnums = cursor.fetchone()
 
             if cvnums:
                 ReviewsNumber = cvnums[0]
                 Cvsreviewed = cvnums[1]
+                reviewerProfile = cvnums[2]
                 st.markdown(
                     f"""
                     <h2>Number of CVs Left to be Reviewed: <span style='color:blue;'>{ReviewsNumber - Cvsreviewed}</span></h2>
@@ -542,10 +558,10 @@ def run():
             query = """
             SELECT DISTINCT Email_ID, Name, drive_link 
             FROM user_data 
-            WHERE status_num = 1 
+            WHERE status_num = 1 AND profilez = %s
             LIMIT 5;
             """
-            cursor.execute(query)
+            cursor.execute(query,(reviewerProfile,))
             cvsList = cursor.fetchall()
 
             cv_count_query = "SELECT COUNT(*) FROM user_data WHERE status_num = 1;"
@@ -553,7 +569,11 @@ def run():
             cv_count = cursor.fetchone()[0]
             cv_display_count = min(5, cv_count)
 
-            st.write(f"Displaying {cv_display_count}/{ReviewsNumber - Cvsreviewed} CVs left to be reviewed")
+            display_count = len(cvsList)
+            st.write(f"Displaying {display_count}/{ReviewsNumber - Cvsreviewed} CVs left to be reviewed")
+
+            if len(cvsList) ==0 :
+                st.success("Currently, there are no more available cvs to be reviewed. Do come back later to find more.")
 
             for email_id, name, drive_link in cvsList[:cv_display_count]:
                 st.image('./Logo/logo2.png', width=150)
