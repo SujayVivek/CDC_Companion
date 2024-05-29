@@ -1,27 +1,4 @@
 
-#SET UP:
-
-# 1. INSTALL BELOW LIBRARIES
-
-        #pip install -r requirements.txt
-
-        # pip install nltk
-
-        # pip install spacy==2.3.5
-
-        # pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.3.1/en_core_web_sm-2.3.1.tar.gz
-
-        # pip install pyresparser
-
-# 2. CREAT A FOLDER AND NAME IT (e.g. resume)
-        #2.1 create two more folders inside this folder (Logo and Uploaded_Resumes)
-        #2.2 create two python files (App.py and Courses.py)
-
-# 3. START YOUR SQL DATABASE
-
-
-# 4. CONTINUE WITH THE FOLLOWING CODE...
-
 import streamlit as st
 import pandas as pd
 import base64,random
@@ -38,8 +15,8 @@ from streamlit_tags import st_tags
 from PIL import Image
 import pymysql
 from Courses import ds_course,web_course,android_course,ios_course,uiux_course,resume_videos,interview_videos
-import pafy #for uploading youtube videos
-import plotly.express as px #to create visualisations at the admin session
+import pafy 
+import plotly.express as px 
 import nltk
 nltk.download('stopwords')
 import os
@@ -55,10 +32,7 @@ def fetch_yt_video(link):
     return video.title
 
 def get_table_download_link(df,filename,text):
-    """Generates a link allowing the data in a given panda dataframe to be downloaded
-    in:  dataframe
-    out: href string
-    """
+    
     csv = df.to_csv(index=False)
     b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
     # href = f'<a href="data:file/csv;base64,{b64}">Download Report</a>'
@@ -412,9 +386,10 @@ def run():
 
                     st.markdown(
                     """
-                    <h2>Lets fuking go, ! tell me if you wanan register!: <span style='color:blue;'>{}</span></h2>
-                    <h3>Number of CVs Reviewed: <span style='color:green;'>{}</span></h3>
-                    """.format(0,0), 
+                    <h1>Would you like to get your CV Reviewed by a senior?</h1><br>
+                    <h2>Please fill the following form below</h2>
+                    <h6>Note: You will be allowed a single CV for Review only</h6>
+                    """, 
                     unsafe_allow_html=True
                     )
 
