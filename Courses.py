@@ -61,3 +61,69 @@ interview_videos = ['https://youtu.be/Tt08KmFfIYQ','https://youtu.be/KukmClH1KoA
                     'https://youtu.be/7_aAicmPB3A','https://youtu.be/1mHjMNZZvFo',
                     'https://youtu.be/WfdtKbAJOmE','https://youtu.be/wFbU185CvDU'
                     'https://youtu.be/wFbU185CvDU','https://youtu.be/TZ3C_syg9Ow']
+
+product_dev_course = [
+    ['Product Management Fundamentals by Coursera', 'https://www.coursera.org/learn/uva-darden-digital-product-management'],
+    ['Become a Product Manager | Learn the Skills & Get the Job by Udemy', 'https://www.udemy.com/course/become-a-product-manager-learn-the-skills-get-a-job/'],
+    ['Product Management First Steps by LinkedIn', 'https://www.linkedin.com/learning/product-management-first-steps'],
+    ['Product Manager Nanodegree by Udacity', 'https://www.udacity.com/course/product-manager-nanodegree--nd036'],
+    ['Product Design by Google', 'https://www.coursera.org/learn/product-design'],
+    ['Digital Product Management by University of Virginia', 'https://www.coursera.org/specializations/digital-product-management'],
+    ['Software Product Management Specialization by Coursera', 'https://www.coursera.org/specializations/software-product-management'],
+    ['Product Management by General Assembly', 'https://generalassemb.ly/education/product-management'],
+    ['Product Management Bootcamp by Thinkful', 'https://www.thinkful.com/bootcamp/product-management/'],
+    ['Product Strategy by Kellogg School of Management', 'https://online.em.kellogg.northwestern.edu/product-strategy/']
+]
+
+software_course = [
+    ['Introduction to Software Development by Coursera', 'https://www.coursera.org/specializations/software-development'],
+    ['Software Development Lifecycle Specialization by Coursera', 'https://www.coursera.org/specializations/software-development-lifecycle'],
+    ['Become a Software Developer by LinkedIn', 'https://www.linkedin.com/learning/paths/become-a-software-developer'],
+    ['Full Stack Web Developer by Udacity', 'https://www.udacity.com/course/full-stack-web-developer-nanodegree--nd0044'],
+    ['Agile Software Development by Coursera', 'https://www.coursera.org/specializations/agile-development'],
+    ['Java Programming and Software Engineering Fundamentals by Coursera', 'https://www.coursera.org/specializations/java-programming'],
+    ['React Nanodegree by Udacity', 'https://www.udacity.com/course/react-nanodegree--nd019'],
+    ['Python for Everybody Specialization by Coursera', 'https://www.coursera.org/specializations/python'],
+    ['Modern React with Redux [2023 Update] by Udemy', 'https://www.udemy.com/course/react-redux/'],
+    ['Mastering Data Structures & Algorithms using C and C++ by Udemy', 'https://www.udemy.com/course/datastructurescncpp/']
+]
+
+finance_quant_course = [
+    ['Financial Engineering and Risk Management by Coursera', 'https://www.coursera.org/specializations/financial-engineering-risk-management'],
+    ['Machine Learning for Trading by Georgia Tech (Udacity)', 'https://www.udacity.com/course/machine-learning-for-trading--ud501'],
+    ['Algorithmic Trading and Finance Models with Python, R, and Stata Essential Training by LinkedIn', 'https://www.linkedin.com/learning/algorithmic-trading-and-finance-models-with-python-r-and-stata-essential-training'],
+    ['Quantitative Finance Specialization by Coursera', 'https://www.coursera.org/specializations/quantitative-finance'],
+    ['Finance for Non-Finance Professionals by Coursera', 'https://www.coursera.org/learn/finance-for-non-finance'],
+    ['Algorithmic Trading Strategies by Coursera', 'https://www.coursera.org/learn/algorithmic-trading-strategies'],
+    ['Introduction to Computational Finance and Financial Econometrics by Coursera', 'https://www.coursera.org/learn/computational-finance'],
+    ['Financial Markets by Yale University', 'https://www.coursera.org/learn/financial-markets-global'],
+    ['The Complete Financial Analyst Course 2023 by Udemy', 'https://www.udemy.com/course/the-complete-financial-analyst-course/'],
+    ['Python for Financial Analysis and Algorithmic Trading by Udemy', 'https://www.udemy.com/course/python-for-finance-and-trading-algorithms/']
+]
+
+consulting_course = [
+    ['Foundations of Business Strategy by Coursera', 'https://www.coursera.org/learn/uva-darden-foundations-business-strategy'],
+    ['Consulting Approach to Problem Solving by Coursera', 'https://www.coursera.org/learn/consulting-problem-solving'],
+    ['Management Consulting Essential Training by LinkedIn', 'https://www.linkedin.com/learning/management-consulting-essential-training'],
+    ['Consulting 101: Mastering the Consulting Skills by Udemy', 'https://www.udemy.com/course/consulting-skills/'],
+    ['Consulting Case Interview Preparation by LinkedIn', 'https://www.linkedin.com/learning/consulting-case-interview-preparation'],
+    ['Consulting Bootcamp by Coursera', 'https://www.coursera.org/learn/consulting-bootcamp'],
+    ['Strategic Consulting by Coursera', 'https://www.coursera.org/specializations/strategic-consulting'],
+    ['Become a Management Consultant by Udemy', 'https://www.udemy.com/course/become-a-management-consultant/'],
+    ['Consulting Foundations: Client Management and Relationships by LinkedIn', 'https://www.linkedin.com/learning/consulting-foundations-client-management-and-relationships'],
+    ['Consulting Masterclass: How to Land High-Paying Clients by Udemy', 'https://www.udemy.com/course/consulting-masterclass/']
+]
+
+core_electrical_electronics_course = [
+    ['Power Electronics Specialization by Coursera', 'https://www.coursera.org/specializations/power-electronics'],
+    ['Fundamentals of Electrical Engineering by Coursera', 'https://www.coursera.org/learn/electrical-engineering'],
+    ['Control of Mobile Robots by Coursera', 'https://www.coursera.org/learn/mobile-robots'],
+    ['Electric Power Systems by Coursera', 'https://www.coursera.org/learn/electric-power-systems'],
+    ['Introduction to Electronics by Coursera', 'https://www.coursera.org/learn/electronics'],
+    ['Digital Systems: From Logic Gates to Processors by Coursera', 'https://www.coursera.org/learn/digital-systems'],
+    ['Analog Circuits by Udemy', 'https://www.udemy.com/course/analog-circuits/'],
+    ['Embedded Systems - Shape The World: Microcontroller Input/Output by Coursera', 'https://www.coursera.org/learn/microcontroller'],
+    ['Advanced Power Electronics by Coursera', 'https://www.coursera.org/learn/advanced-power-electronics'],
+    ['Electric Circuits for Beginners by Udemy', 'https://www.udemy.com/course/electric-circuits-for-beginners/']
+]
+

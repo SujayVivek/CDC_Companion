@@ -14,7 +14,7 @@ import io,random
 from streamlit_tags import st_tags
 from PIL import Image
 import pymysql
-from Courses import ds_course,web_course,android_course,ios_course,uiux_course,resume_videos,interview_videos
+from Courses import ds_course,web_course,android_course,ios_course,uiux_course,resume_videos,interview_videos,software_course,finance_quant_course,consulting_course,core_electrical_electronics_course,product_dev_course
 import pafy 
 import plotly.express as px 
 import nltk
@@ -110,10 +110,10 @@ st.set_page_config(
    page_icon='./Logo/logo2.png',
 )
 def run():
-    img = Image.open('./Logo/CQlogo1.png')
-    img = img.resize((800, 300))
+    img = Image.open('./Logo/CQlogo2.png')
+    img = img.resize((1000, 300))
     st.image(img)
-    st.title("CQ CV Portal")
+    st.title("Communiqué - CV Portal")
     st.sidebar.markdown("# Choose User")
     activities = ["User", "Reviewer" ,"Admin"]
     choice = st.sidebar.selectbox("Choose among the given options:", activities)
@@ -172,11 +172,11 @@ def run():
     cursor.execute(create_table_query_forreviwied)
     if choice == 'User':
 
-        name = st.text_input("Enter your Name & Roll No (follow the format):", placeholder="Sujay Vivek 22EE30029")
+        name = st.text_input("Enter your Name & Roll No (follow the format):", placeholder="Jhonny Bravo 22XX9999")
         if name:
             name = name.strip();
             nameArray= name.split(' ');
-            st.markdown('''<h5 style='text-align: left; color: #021659;'> Drop your CV bruh</h5>''',
+            st.markdown('''<h5 style='text-align: left; color: #021659;'> Select Your CV Here:</h5>''',
                         unsafe_allow_html=True)
             pdf_file = st.file_uploader("Choose your Resume", type=["pdf"])
             if pdf_file is not None:
@@ -192,7 +192,7 @@ def run():
                     resume_text = pdf_reader(save_image_path)
 
                     st.header("**Resume Analysis**")
-                    st.success("Hello "+ resume_data['name'])
+                    st.success("Hello "+ name)
                     st.subheader("**Your Basic info**")
                     try:
                         st.text('Name: '+ nameArray[:-1])
@@ -226,7 +226,13 @@ def run():
                     android_keyword = ['android','android development','flutter','kotlin','xml','kivy']
                     ios_keyword = ['ios','ios development','swift','cocoa','cocoa touch','xcode']
                     uiux_keyword = ['ux','adobe xd','figma','zeplin','balsamiq','ui','prototyping','wireframes','storyframes','adobe photoshop','photoshop','editing','adobe illustrator','illustrator','adobe after effects','after effects','adobe premier pro','premier pro','adobe indesign','indesign','wireframe','solid','grasp','user research','user experience']
-
+                    product_keyword = ['product management', 'product development', 'product design', 'market research', 'product strategy']
+                    software_keyword = ['software development', 'java', 'c++', 'python', 'software engineering', 'ruby', 'c#', 'javascript']
+                    finance_keyword = ['finance', 'quant', 'investment', 'risk management', 'financial analysis', 'hedge fund', 'trading']
+                    consulting_keyword = ['consulting', 'business strategy', 'market analysis', 'management consulting', 'operations consulting']
+                    core_electrical_keyword = ['electrical engineering', 'electronics', 'circuit design', 'embedded systems', 'vlsi', 'signal processing']
+                    
+                    
                     recommended_skills = []
                     reco_field = ''
                     rec_course = ''
@@ -291,7 +297,61 @@ def run():
                             st.markdown('''<h4 style='text-align: left; color: #1ed760;'>Adding this skills to resume will boost🚀 the chances of getting a Job💼</h4>''',unsafe_allow_html=True)
                             rec_course = course_recommender(uiux_course)
                             break
+                        
+                        elif i.lower() in product_keyword:
+                            print(i.lower())
+                            reco_field = 'Product Development'
+                            st.success("** Our analysis says you are looking for Product Development Jobs **")
+                            recommended_skills = ['Product Management', 'Product Design', 'Market Research', 'Product Strategy', 'Agile Methodologies', 'Scrum', 'User Research']
+                            recommended_keywords = st_tags(label='### Recommended skills for you.',
+                                                        text='Recommended skills generated from System', value=recommended_skills, key='7')
+                            st.markdown('''<h4 style='text-align: left; color: #1ed760;'>Adding these skills to your resume will boost🚀 the chances of getting a Job</h4>''', unsafe_allow_html=True)
+                            rec_course = course_recommender(product_dev_course)
+                            break
 
+                        elif i.lower() in software_keyword:
+                            print(i.lower())
+                            reco_field = 'Software Development'
+                            st.success("** Our analysis says you are looking for Software Development Jobs **")
+                            recommended_skills = ['Software Engineering', 'Java', 'C++', 'Python', 'Ruby', 'C#', 'JavaScript', 'Agile Development', 'Scrum']
+                            recommended_keywords = st_tags(label='### Recommended skills for you.',
+                                                        text='Recommended skills generated from System', value=recommended_skills, key='8')
+                            st.markdown('''<h4 style='text-align: left; color: #1ed760;'>Adding these skills to your resume will boost🚀 the chances of getting a Job</h4>''', unsafe_allow_html=True)
+                            rec_course = course_recommender(software_course)
+                            break
+
+                        elif i.lower() in finance_keyword:
+                            print(i.lower())
+                            reco_field = 'Finance and Quant'
+                            st.success("** Our analysis says you are looking for Finance and Quant Jobs **")
+                            recommended_skills = ['Financial Analysis', 'Investment Management', 'Risk Management', 'Quantitative Analysis', 'Hedge Funds', 'Trading', 'Financial Modeling']
+                            recommended_keywords = st_tags(label='### Recommended skills for you.',
+                                                        text='Recommended skills generated from System', value=recommended_skills, key='9')
+                            st.markdown('''<h4 style='text-align: left; color: #1ed760;'>Adding these skills to your resume will boost🚀 the chances of getting a Job</h4>''', unsafe_allow_html=True)
+                            rec_course = course_recommender(finance_quant_course)
+                            break
+
+                        elif i.lower() in consulting_keyword:
+                            print(i.lower())
+                            reco_field = 'Consulting'
+                            st.success("** Our analysis says you are looking for Consulting Jobs **")
+                            recommended_skills = ['Business Strategy', 'Market Analysis', 'Management Consulting', 'Operations Consulting', 'Project Management', 'Data Analysis', 'Client Relations']
+                            recommended_keywords = st_tags(label='### Recommended skills for you.',
+                                                        text='Recommended skills generated from System', value=recommended_skills, key='10')
+                            st.markdown('''<h4 style='text-align: left; color: #1ed760;'>Adding these skills to your resume will boost🚀 the chances of getting a Job</h4>''', unsafe_allow_html=True)
+                            rec_course = course_recommender(consulting_course)
+                            break
+
+                        elif i.lower() in core_electrical_keyword:
+                            print(i.lower())
+                            reco_field = 'Core Electrical/Electronics'
+                            st.success("** Our analysis says you are looking for Core Electrical/Electronics Jobs **")
+                            recommended_skills = ['Circuit Design', 'Embedded Systems', 'VLSI', 'Signal Processing', 'Microcontrollers', 'PCB Design', 'Analog and Digital Electronics']
+                            recommended_keywords = st_tags(label='### Recommended skills for you.',
+                                                        text='Recommended skills generated from System', value=recommended_skills, key='11')
+                            st.markdown('''<h4 style='text-align: left; color: #1ed760;'>Adding these skills to your resume will boost🚀 the chances of getting a Job</h4>''', unsafe_allow_html=True)
+                            rec_course = course_recommender(core_electrical_electronics_course)
+                            break
                     
                     ## Insert into table
                     ts = time.time()
@@ -310,7 +370,7 @@ def run():
 
                     if 'EDUCATION'  in resume_text:
                         resume_score = resume_score + 20
-                        st.markdown('''<h5 style='text-align: left; color: #1ed760;'>[+] Awesome! You have added Education/h4>''',unsafe_allow_html=True)
+                        st.markdown('''<h5 style='text-align: left; color: #1ed760;'>[+] Awesome! You have added Education</h5>''',unsafe_allow_html=True)
                     else:
                         st.markdown('''<h5 style='text-align: left; color: #000000;'>[-] Please add Education. This is very important as you are required to mention this in your CV/Resume.</h4>''',unsafe_allow_html=True)
 
@@ -400,7 +460,7 @@ def run():
                     profileList = ['Data', 'Software', 'Consult', 'Finance-Quant', 'Product', 'FMCG']
                     # Check if the status is NULL or not set
                     if status_row is None or status_row[0] == 0:
-                        st.write("Do you want to submit your CV to a senior for review?")
+                        st.write("( Make sure you have provided access to your CV in the drive link )")
                         email_input = st.text_input("Enter your Email here: ")
                         drive_link = st.text_input("Enter your Drive Link: ")
                         profile = st.selectbox("Enter the profile you are targetting", profileList)
@@ -476,7 +536,7 @@ def run():
 
                 cursor.execute('''SELECT * FROM reviews_data''')
                 data = cursor.fetchall()
-                st.header("**Reviewer's Data**")
+                st.header("**Reviews Data**")
                 df = pd.DataFrame(data, columns=['id', 'Name', 'Email_ID', 'Reviewer_Name', 'Drive_link', 'Review'])
                 st.dataframe(df)
                 st.markdown(get_table_download_link(df,'User_Data.csv','Download Report'), unsafe_allow_html=True)
@@ -522,7 +582,7 @@ def run():
                 reviewerProfile = cvnums[2]
                 st.markdown(
                     f"""
-                    <h2>Number of CVs Left to be Reviewed: <span style='color:blue;'>{ReviewsNumber - Cvsreviewed}</span></h2>
+                    <h3>Number of CVs Left to be Reviewed: <span style='color:blue;'>{ReviewsNumber - Cvsreviewed}</span></h3>
                     <h3>Number of CVs Reviewed: <span style='color:green;'>{Cvsreviewed}</span></h3>
                     """,
                     unsafe_allow_html=True
@@ -539,6 +599,8 @@ def run():
             cursor.execute(query,(reviewerProfile,))
             cvsList = cursor.fetchall()
 
+            st.success('Hello '+ ad_user);
+
             cv_count_query = "SELECT COUNT(*) FROM user_data WHERE status_num = 1;"
             cursor.execute(cv_count_query)
             cv_count = cursor.fetchone()[0]
@@ -551,7 +613,7 @@ def run():
                 st.success("Currently, there are no more available cvs to be reviewed. Do come back later to find more.")
 
             for email_id, name, drive_link in cvsList[:cv_display_count]:
-                st.image('./Logo/logo2.png', width=150)
+                st.image('./Logo/CVlogo.png', width=150)
                 st.write(f"Name: {name}")
                 st.write(f"Email: {email_id}")
                 st.markdown(f"[Drive Link]({drive_link})")
