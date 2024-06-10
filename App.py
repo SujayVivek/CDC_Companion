@@ -15,16 +15,18 @@ from streamlit_tags import st_tags
 from PIL import Image
 import pymysql
 from Courses import ds_course,web_course,android_course,ios_course,uiux_course,resume_videos,interview_videos,software_course,finance_quant_course,consulting_course,core_electrical_electronics_course,product_dev_course
-import pafy 
+# import pafy 
 import plotly.express as px 
 import nltk
 nltk.download('stopwords')
 import os
 import time
 
-os.environ["PAFY_BACKEND"] = "internal"
-
-import pafy 
+# import pafy
+# os.environ["PAFY_BACKEND"] = "internal"
+ 
+# nltk
+# spacy==2.3.5
 
 
 def fetch_yt_video(link):
