@@ -21,7 +21,7 @@ import nltk
 nltk.download('stopwords')
 import os
 import time
-
+ 
 # import pafy
 # os.environ["PAFY_BACKEND"] = "internal"
  
@@ -29,9 +29,9 @@ import time
 # spacy==2.3.5
 
 
-def fetch_yt_video(link):
-    video = pafy.new(link)
-    return video.title
+# def fetch_yt_video(link):
+#     video = pafy.new(link)
+#     return video.title
 
 def get_table_download_link(df,filename,text):
     
@@ -86,23 +86,24 @@ def course_recommender(course_list):
 
 #CONNECT TO DATABASE
 
-connection = pymysql.connect(host='localhost',user='root',password='sujay@admin$password123',db='cdc_companion')
+connection = pymysql.connect(host='cdc-companion-service-cdc-companionz.i.aivencloud.com',user='avnadmin',password='AVNS_fJQuAkQEoVRHm7nXzwp',db='cdc_companion', port=27490 , ssl={'ca': 'certs/ca.pem'})
 cursor = connection.cursor()
 
-def insert_data(name,email,res_score,timestamp,no_of_pages,reco_field,cand_level,skills,recommended_skills,courses, drive_link, status, profile):
+def insert_data(name, email, res_score, timestamp, no_of_pages, reco_field, cand_level, skills, recommended_skills, courses, drive_link, status, profile):
     DB_table_name = 'user_data'
-    status = 0
-    insert_sql = "insert into " + DB_table_name + """
-    values (0,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
-    rec_values = (str(name), email, str(res_score), timestamp,str(no_of_pages), reco_field, cand_level, skills,recommended_skills,courses, str(drive_link) , int(status), str(profile))
+    insert_sql = "INSERT INTO " + DB_table_name + """
+    (Name, Email_ID, resume_score, Timestamp, Page_no, Predicted_Field, User_level, Actual_skills, Recommended_skills, Recommended_courses, drive_link, status_num, profilez)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+    rec_values = (str(name), email, str(res_score), timestamp, str(no_of_pages), reco_field, cand_level, skills, recommended_skills, courses, str(drive_link), int(status), str(profile))
     cursor.execute(insert_sql, rec_values)
     connection.commit()
+
 
 
 def insert_data_reviewers(name,username,pwd, reviewsnum, cvsreviewed):
     DB_table_name = 'reviewer_data'
     insert_sql = "insert into " + DB_table_name + """
-    values (0,%s,%s,%s,%f,%f)"""
+    values (%s, %s, %s, %s, %s)"""
     rec_values = (str(name),str(username), str(pwd), int(reviewsnum), int(cvsreviewed))
     cursor.execute(insert_sql, rec_values)
     connection.commit()
@@ -172,6 +173,11 @@ def run():
     """
 
     cursor.execute(create_table_query_forreviwied)
+
+    # alter_table_sql = "ALTER TABLE user_data ADD COLUMN profilez VARCHAR(255)"
+    # cursor.execute(alter_table_sql)
+    
+
     if choice == 'User':
 
         name = st.text_input("Enter your Name & Roll No (follow the format):", placeholder="Jhonny Bravo 22XX9999")
@@ -530,7 +536,7 @@ def run():
                 cursor.execute('''SELECT * FROM reviewer_data''')
                 data = cursor.fetchall()
                 st.header("**Reviewer's Data**")
-                df = pd.DataFrame(data, columns=['ID', 'Name', 'Email', 'UserName', 'Password', 'ReviewsNumber', 'Cvsreviewed', 'Rprofilez'])
+                df = pd.DataFrame(data, columns=['Name', 'Email', 'UserName', 'Password', 'ReviewsNumber', 'Cvsreviewed', 'Rprofilez'])
                 st.dataframe(df)
                 st.markdown(get_table_download_link(df,'User_Data.csv','Download Report'), unsafe_allow_html=True)
                 ## Admin Side Data
