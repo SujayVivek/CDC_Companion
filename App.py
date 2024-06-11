@@ -86,7 +86,7 @@ def course_recommender(course_list):
 
 #CONNECT TO DATABASE
 
-connection = pymysql.connect(host='cdc-companion-service-cdc-companionz.i.aivencloud.com',user='avnadmin',password='AVNS_fJQuAkQEoVRHm7nXzwp',db='cdc_companion', port=27490 , ssl={'ca': 'certs/ca.pem'})
+connection = pymysql.connect(host='',user='',password='',db='', port=27490 , ssl={'ca': 'certs/ca.pem'})
 cursor = connection.cursor()
 
 def insert_data(name, email, res_score, timestamp, no_of_pages, reco_field, cand_level, skills, recommended_skills, courses, drive_link, status, profile):
